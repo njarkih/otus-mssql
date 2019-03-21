@@ -1,4 +1,4 @@
--- 5.Напишите запрос, который выгрузит данные через bcp out и загрузит через bulk insert
+-- 5.РќР°РїРёС€РёС‚Рµ Р·Р°РїСЂРѕСЃ, РєРѕС‚РѕСЂС‹Р№ РІС‹РіСЂСѓР·РёС‚ РґР°РЅРЅС‹Рµ С‡РµСЂРµР· bcp out Рё Р·Р°РіСЂСѓР·РёС‚ С‡РµСЂРµР· bulk insert
 
 -- To allow advanced options to be changed.  
 EXEC sp_configure 'show advanced options', 1;  
