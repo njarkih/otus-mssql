@@ -1,4 +1,4 @@
--- 3.  изменить одну запись, из добавленных через UPDATE
+-- 3.  РёР·РјРµРЅРёС‚СЊ РѕРґРЅСѓ Р·Р°РїРёСЃСЊ, РёР· РґРѕР±Р°РІР»РµРЅРЅС‹С… С‡РµСЂРµР· UPDATE
 UPDATE TOP (1) Sales.Customers
 SET CustomerName = REPLACE(CustomerName, 'MyIns', 'MyUpd') 
 OUTPUT inserted.*, deleted.*
