@@ -1,4 +1,4 @@
--- 1. Довставлять в базу 5 записей используя insert в таблицу Customers или Suppliers 
+-- 1. Р”РѕРІСЃС‚Р°РІР»СЏС‚СЊ РІ Р±Р°Р·Сѓ 5 Р·Р°РїРёСЃРµР№ РёСЃРїРѕР»СЊР·СѓСЏ insert РІ С‚Р°Р±Р»РёС†Сѓ Customers РёР»Рё Suppliers 
 INSERT Sales.Customers (
   CustomerName
 , BillToCustomerID
