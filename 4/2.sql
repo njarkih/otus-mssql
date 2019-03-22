@@ -1,4 +1,4 @@
--- 2. Выберите товары с минимальной ценой (подзапросом), 2 варианта подзапроса. 
+-- 2. Р’С‹Р±РµСЂРёС‚Рµ С‚РѕРІР°СЂС‹ СЃ РјРёРЅРёРјР°Р»СЊРЅРѕР№ С†РµРЅРѕР№ (РїРѕРґР·Р°РїСЂРѕСЃРѕРј), 2 РІР°СЂРёР°РЅС‚Р° РїРѕРґР·Р°РїСЂРѕСЃР°. 
 SELECT 
   i.StockItemID
 , i.StockItemName
@@ -26,4 +26,4 @@ SELECT
 , i.UnitPrice 
 FROM Warehouse.StockItems i 
 WHERE i.UnitPrice = (SELECT TOP 1 UnitPrice FROM Warehouse.StockItems ORDER BY UnitPrice)
-; 
+;
