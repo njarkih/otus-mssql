@@ -51,7 +51,8 @@ JOIN Sales.Invoices i ON t.InvoiceID = i.InvoiceID
 -- не стала выносить расчёт суммы продаж в отдельный подзапрос, а делаю JOIN сразу с SalesTotal 
 -- чтобы ограничить количество заказов только теми, что имеют сумму по счёт-факруте > 27000
 JOIN Sales.Orders o ON i.OrderId = o.OrderID
-  AND o.PickingCompletedWhen IS NOT NULL
+  AND o.PickingCompletedWhen IS NOT NULL 
+  -- была ещё идея переписать NOT на положительное условие, например, IIF(o.PickingCompletedWhen IS NULL, 0, 1) = 1, но в плане ничего не изменилось
 JOIN Sales.OrderLines l ON o.OrderID = l.OrderID 
 JOIN Application.People p ON p.PersonID = i.SalespersonPersonID
 GROUP BY i.InvoiceID, i.InvoiceDate, t.TotalSumm, p.FullName 
