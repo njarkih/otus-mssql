@@ -1,4 +1,4 @@
--- 1.  Выберите сотрудников, которые являются продажниками, и еще не сделали ни одной продажи.
+-- 1.  Р’С‹Р±РµСЂРёС‚Рµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ СЏРІР»СЏСЋС‚СЃСЏ РїСЂРѕРґР°Р¶РЅРёРєР°РјРё, Рё РµС‰Рµ РЅРµ СЃРґРµР»Р°Р»Рё РЅРё РѕРґРЅРѕР№ РїСЂРѕРґР°Р¶Рё.
 WITH orders (id) AS (
   SELECT DISTINCT 
     SalespersonPersonID 
@@ -32,10 +32,5 @@ WHERE p.IsSalesperson = 1
 SELECT p.PersonID, p.FullName
 FROM Application.People p
 WHERE p.IsSalesperson = 1
-  AND p.PersonID NOT IN (SELECT DISTINCT SalespersonPersonID 
-						 FROM Sales.Orders o)
+  AND p.PersonID NOT IN (SELECT DISTINCT SalespersonPersonID FROM Sales.Orders o)
 ;
-
-
-
- 
