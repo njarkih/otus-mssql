@@ -23,9 +23,9 @@ SELECT
 , c.CreditLimit
 FROM Sales.Customers c
 WHERE c.CustomerID IN (SELECT TOP 5
-					     CustomerId
-					   FROM Sales.CustomerTransactions
-					   ORDER BY TransactionAmount DESC)
+		         CustomerId
+		       FROM Sales.CustomerTransactions
+		       ORDER BY TransactionAmount DESC)
 ;
 
 WITH MaxTransaction AS (
