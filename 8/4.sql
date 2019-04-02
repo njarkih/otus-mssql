@@ -20,7 +20,7 @@ CROSS APPLY (SELECT TOP 2
 			 WHERE c.CustomerID = i.CustomerID
 			 GROUP BY 
 			   i.CustomerID
-             , l.StockItemID
-             , l.UnitPrice
+                         , l.StockItemID
+                         , l.UnitPrice
 			 ORDER BY CustomerID, rn) e
 ;
