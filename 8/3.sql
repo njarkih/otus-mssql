@@ -16,8 +16,8 @@ FROM
    (SELECT 
       CountryId
 	, CountryName
-	, CONVERT(NVARCHAR(6), IsoAlpha3Code) IsoAlpha3Code -- в базе у IsoAlpha3Code тип NVARCHAR(6), тогда почему без этого CONVERT запрос не работает? 
-	, CONVERT(NVARCHAR(6), IsoNumericCode) IsoNumericCode
+	, IsoAlpha3Code IsoAlpha3Code
+	, CONVERT(NVARCHAR(3), IsoNumericCode) IsoNumericCode
     FROM Application.Countries
    ) p
 UNPIVOT
