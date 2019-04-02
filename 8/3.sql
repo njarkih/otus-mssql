@@ -1,12 +1,12 @@
--- 3. В таблице стран есть поля с кодом страны цифровым и буквенным
--- сделайте выборку ИД страны, название, код - чтобы в поле был либо цифровой либо буквенный код
--- Пример выдачи
+--3. В таблице стран есть поля с кодом страны цифровым и буквенным
+--сделайте выборку ИД страны, название, код - чтобы в поле был либо цифровой либо буквенный код
+--Пример выдачи
 -- 
--- CountryId	CountryName	Code
--- 1	Afghanistan	AFG
--- 1	Afghanistan	4
--- 3	Albania	ALB
--- 3	Albania	8
+--CountryId	CountryName	Code
+--1	Afghanistan	AFG
+--1	Afghanistan	4
+--3	Albania	ALB
+--3	Albania	8
 
 SELECT 
   CountryId
@@ -15,9 +15,9 @@ SELECT
 FROM
    (SELECT 
       CountryId
-	, CountryName
-	, IsoAlpha3Code IsoAlpha3Code
-	, CONVERT(NVARCHAR(3), IsoNumericCode) IsoNumericCode
+    , CountryName
+    , IsoAlpha3Code IsoAlpha3Code
+    , CONVERT(NVARCHAR(3), IsoNumericCode) IsoNumericCode
     FROM Application.Countries
    ) p
 UNPIVOT
