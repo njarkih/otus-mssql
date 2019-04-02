@@ -1,17 +1,24 @@
---2. Для всех клиентов с именем, в котором есть Tailspin Toys
---вывести все адреса, которые есть в таблице, в одной колонке
+-- 2. Для всех клиентов с именем, в котором есть Tailspin Toys
+-- вывести все адреса, которые есть в таблице, в одной колонке
+   
+-- Пример результатов
+-- CustomerName	AddressLine
+-- Tailspin Toys (Head Office)	Shop 38
+-- Tailspin Toys (Head Office)	1877 Mittal Road
+-- Tailspin Toys (Head Office)	PO Box 8975
+-- Tailspin Toys (Head Office)	Ribeiroville
+-- .....
 
---Пример результатов
---CustomerName	AddressLine
---Tailspin Toys (Head Office)	Shop 38
---Tailspin Toys (Head Office)	1877 Mittal Road
---Tailspin Toys (Head Office)	PO Box 8975
---Tailspin Toys (Head Office)	Ribeiroville
---.....
-
-SELECT CustomerName, AddressLine
+SELECT
+  CustomerName
+, AddressLine
 FROM
-   (SELECT CustomerName, DeliveryAddressLine1, DeliveryAddressLine2, PostalAddressLine1, PostalAddressLine2
+   (SELECT
+      CustomerName
+	, DeliveryAddressLine1
+	, DeliveryAddressLine2
+	, PostalAddressLine1
+	, PostalAddressLine2
     FROM Sales.Customers
     WHERE CustomerName LIKE 'Tailspin Toys%'
    ) p
