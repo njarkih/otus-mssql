@@ -33,3 +33,38 @@ PIVOT
    ) AS PivotTbl
 ORDER BY InvoiceMonth
 ;
+                                                                                                                     
+-- вариант 2
+DECLARE @SQL NVARCHAR(4000);
+
+WITH SelectSection AS (
+  SELECT 
+    STRING_AGG(TailspinToys, ', ') TailspinToysList
+  FROM
+     (SELECT DISTINCT 
+        '[' + REPLACE(REPLACE(c.CustomerName, 'Tailspin Toys (', ''), ')', '') + ']' TailspinToys
+      FROM Sales.Invoices i
+      JOIN Sales.Customers c ON i.CustomerID = c.CustomerID AND i.CustomerID BETWEEN 2 AND 6
+     ) t
+)
+SELECT @SQL = '
+   SELECT CONVERT(DATE, InvoiceMonth, 104) InvoiceMonth, ' + (SELECT TailspinToysList FROM SelectSection)
++ '
+   FROM 
+      (SELECT 
+         i.OrderID
+       , DATEADD(MM, DATEDIFF(MM, 0, i.InvoiceDate), 0) InvoiceMonth
+       , REPLACE(REPLACE(c.CustomerName, ''Tailspin Toys ('', ''''), '')'', '''') AS TailspinToys
+       FROM Sales.Invoices i
+       JOIN Sales.Customers c ON i.CustomerID = c.CustomerID
+       AND i.CustomerID BETWEEN 2 AND 6
+      ) AS SourceTbl
+   PIVOT 
+     (COUNT(OrderID) FOR TailspinToys IN ( ' + (SELECT TailspinToysList FROM SelectSection) + ')
+     ) PivotTbl 
+     ORDER BY InvoiceMonth ' 
+;
+
+print @SQL;
+
+EXEC sys.sp_executesql @SQL;
