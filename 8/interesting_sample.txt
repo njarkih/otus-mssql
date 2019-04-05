@@ -1,3 +1,5 @@
+http://sqlbanana.blogspot.com/2014/11/sql-unpivot-on-multiple-columns.html
+
 SQL UNPIVOT on Multiple Columns
 Some time ago I posted about using the UNPIVOT function in a stored procedure here.  Recently I came across an interesting problem that required further use of the UNPIVOT command.
 
