@@ -12,17 +12,9 @@
 SELECT
   CustomerName
 , AddressLine
-FROM
-   (SELECT
-      CustomerName
-    , DeliveryAddressLine1
-    , DeliveryAddressLine2
-    , PostalAddressLine1
-    , PostalAddressLine2
-    FROM Sales.Customers
-    WHERE CustomerName LIKE 'Tailspin Toys%'
-   ) p
+FROM Sales.Customers
 UNPIVOT
    (AddressLine FOR LineType IN (DeliveryAddressLine1, DeliveryAddressLine2, PostalAddressLine1, PostalAddressLine2)
    ) AS unpvt
+WHERE CustomerName LIKE 'Tailspin Toys%'
 ;
