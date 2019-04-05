@@ -8,18 +8,19 @@
 --3	Albania	ALB
 --3	Albania	8
 
+WITH p AS (
+  SELECT 
+    CountryId
+  , CountryName
+  , IsoAlpha3Code IsoAlpha3Code
+  , CONVERT(NVARCHAR(3), IsoNumericCode) IsoNumericCode
+  FROM Application.Countries
+)
 SELECT 
   CountryId
 , CountryName
 , Code
-FROM
-   (SELECT 
-      CountryId
-    , CountryName
-    , IsoAlpha3Code IsoAlpha3Code
-    , CONVERT(NVARCHAR(3), IsoNumericCode) IsoNumericCode
-    FROM Application.Countries
-   ) p
+FROM p
 UNPIVOT
    (Code FOR CodeType IN (IsoAlpha3Code, IsoNumericCode)
    ) AS unpvt
