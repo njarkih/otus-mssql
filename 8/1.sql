@@ -13,7 +13,7 @@
 --01.02.2013 7 3 4 2 1
 
 SELECT 
-  CONVERT(NVARCHAR(10), InvoiceMonth, 104)
+  CONVERT(NVARCHAR(10), InvoiceMnt, 104) InvoiceMonth
 , [Peeples Valley, AZ]
 , [Medicine Lodge, KS]
 , [Gasport, NY]
@@ -22,7 +22,7 @@ SELECT
 FROM 
    (SELECT 
       i.OrderID
-    , DATEADD(MM, DATEDIFF(MM, 0, i.InvoiceDate), 0) InvoiceMonth
+    , DATEADD(MM, DATEDIFF(MM, 0, i.InvoiceDate), 0) InvoiceMnt
     , REPLACE(REPLACE(c.CustomerName, 'Tailspin Toys (', ''), ')', '') AS TailspinToys
     FROM Sales.Invoices i
     JOIN Sales.Customers c ON i.CustomerID = c.CustomerID
@@ -31,7 +31,7 @@ FROM
 PIVOT 
    (COUNT(OrderID) FOR TailspinToys IN ([Peeples Valley, AZ], [Medicine Lodge, KS], [Gasport, NY], [Sylvanite, MT], [Jessie, ND])
    ) AS PivotTbl
-ORDER BY InvoiceMonth
+ORDER BY InvoiceMnt
 ;
                                                                                                                      
 -- вариант 2
@@ -48,12 +48,12 @@ WITH SelectSection AS (
      ) t
 )
 SELECT @SQL = '
-   SELECT CONVERT(NVARCHAR(10), InvoiceMonth, 104), ' + (SELECT TailspinToysList FROM SelectSection)
+   SELECT CONVERT(NVARCHAR(10), InvoiceMnt, 104) InvoiceMonth, ' + (SELECT TailspinToysList FROM SelectSection)
 + '
    FROM 
       (SELECT 
          i.OrderID
-       , DATEADD(MM, DATEDIFF(MM, 0, i.InvoiceDate), 0) InvoiceMonth
+       , DATEADD(MM, DATEDIFF(MM, 0, i.InvoiceDate), 0) InvoiceMnt
        , REPLACE(REPLACE(c.CustomerName, ''Tailspin Toys ('', ''''), '')'', '''') AS TailspinToys
        FROM Sales.Invoices i
        JOIN Sales.Customers c ON i.CustomerID = c.CustomerID
@@ -62,7 +62,7 @@ SELECT @SQL = '
    PIVOT 
      (COUNT(OrderID) FOR TailspinToys IN ( ' + (SELECT TailspinToysList FROM SelectSection) + ')
      ) PivotTbl 
-     ORDER BY InvoiceMonth ' 
+     ORDER BY InvoiceMnt ' 
 ;
 
 print @SQL;
