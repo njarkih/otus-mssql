@@ -1,0 +1,83 @@
+SQL UNPIVOT on Multiple Columns
+Some time ago I posted about using the UNPIVOT function in a stored procedure here.  Recently I came across an interesting problem that required further use of the UNPIVOT command.
+
+Suppose you have a number of columns in a wide table that you would like to unpivot into a single column and multiple rows. An example might be when there are many measure columns and you would like to narrow the table by combining all the measure columns into a single column. This would be a fairly standard use of the UNPIVOT command that was covered in the earlier post.
+
+
+Now suppose that there are two sets of measures that you would like kept as separate columns,  Instead of a single MeasureName and MeasureValue column, you would like 2 of each.  Or perhaps a simpler example might not be measure, but dimensional data.  Let's look at CRM system data:
+
+CREATE TABLE Company
+(Id INT,
+CompanyName VARCHAR(500),
+Contact1 VARCHAR(500),
+Contact2 VARCHAR(500),
+Email1 VARCHAR(500),
+Email2 VARCHAR(500)
+)
+GO
+INSERT INTO Company SELECT
+1, 'FastCarsCo', 'Mr Purple', 'Mr Orange', 'purple@fcc.com', 'orange@fcc.com'
+UNION ALL SELECT
+2, 'TastyCakeShop', 'Mr Brown', 'Mr White', 'brown@tcs.com', 'orange@tcs.com'
+UNION ALL SELECT
+3, 'KidsToys', 'Mr Pink', 'Mr Black', 'pink@kt.com', 'black@kt.com'
+UNION ALL SELECT
+4, 'FruitStall', 'Mr Red', 'Mr Blue', 'red@fs.com', 'blue@fs.com'
+GO
+
+SELECT Id, CompanyName, contact1, contact2, email1, email2
+FROM Company
+GO
+
+
+
+
+In this example we have a company table with two contacts for each company, and an email address for each contact.  Instead of two columns for contact names and two for email addresses, we would like to reduce this to one of each: CompanyName, ContactName, EmailAddress.  First let's try and reduce the contact1 and contact2 columns to one:
+SELECT ID, CompanyName, ContactName,Contact
+FROM
+(
+SELECT ID, CompanyName, Contact1, Contact2
+FROM Company
+) src
+UNPIVOT
+(
+ContactName FOR Contact IN (Contact1, Contact2)
+) pvt
+
+
+
+
+
+We have now replaced the contact1 and contact2 fields with a single ContactName field.  I have added the new Contact column to indicate the source of the data.  This can be removed from the select list if it is not required.
+
+Next we need to perform a similar unpivot on the email columns.  This is actually easier that you might think.  Rather than nesting queries, or complex CTEs, we need only append our first query with another unpivot statement:
+
+SELECT Id,
+CompanyName,
+ContactName,
+EmailAddress,
+Contact
+FROM
+(
+SELECT Id, CompanyName, Contact1, Contact2, Email1, Email2
+FROM Company
+) src
+
+UNPIVOT
+(
+ContactName FOR Contact IN (Contact1, Contact2 )
+) pvt1
+
+UNPIVOT
+(
+EmailAddress For Email IN (Email1, Email2 )
+) pvt2
+
+WHERE RIGHT(Contact,1) = RIGHT(Email,1)
+
+
+
+
+The WHERE clause in the above query is very important.  Without it, we haven't told SQL Server how the second set of unpivoted data matches the first.  Without the WHERE , it will do a cross join, resulting in Mr Purple occurring twice; once with the correct email address, and once with the address of Mr Orange, his colleague. 
+
+In the WHERE clause we state that the new columns we have created, Contact (selected) and Email (not selected) should be joined on the last character. Remember that these two columns are populated with the names of the original fields, ie Contact1, Contact2, and Email1, Email2.  The two columns therefore align as Contact1 → Email1 (1=1) and Contact2 → Email2 (2=2).  Hence it is important that the names of the original columns in our source Company table contain text such that they can be joined together in the WHERE clause at the end of the query.
