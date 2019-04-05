@@ -13,7 +13,7 @@
 --01.02.2013 7 3 4 2 1
 
 SELECT 
-  CONVERT(DATE, InvoiceMonth, 104) InvoiceMonth -- не преобразует в dd.mm.yyyy т_т
+  CONVERT(NVARCHAR(10), InvoiceMonth, 104)
 , [Peeples Valley, AZ]
 , [Medicine Lodge, KS]
 , [Gasport, NY]
@@ -48,7 +48,7 @@ WITH SelectSection AS (
      ) t
 )
 SELECT @SQL = '
-   SELECT CONVERT(DATE, InvoiceMonth, 104) InvoiceMonth, ' + (SELECT TailspinToysList FROM SelectSection)
+   SELECT CONVERT(NVARCHAR(10), InvoiceMonth, 104), ' + (SELECT TailspinToysList FROM SelectSection)
 + '
    FROM 
       (SELECT 
