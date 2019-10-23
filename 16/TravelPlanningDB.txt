@@ -1,0 +1,296 @@
+-- ************************************** [trvl].[History]
+
+CREATE TABLE [trvl].[History]
+(
+ [id]         bigint NOT NULL ,
+ [date_from]  datetime2 NULL ,
+ [date_to]    datetime2 NULL ,
+ [id_place]   bigint NOT NULL ,
+ [id_project] int NOT NULL ,
+
+
+ CONSTRAINT [PK_History] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_107] FOREIGN KEY ([id_project])  REFERENCES [trvl].[Project]([id]),
+ CONSTRAINT [FK_64] FOREIGN KEY ([id_place])  REFERENCES [trvl].[Location]([id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_107] ON [trvl].[History] 
+ (
+  [id_project] ASC
+ )
+
+GO
+
+CREATE NONCLUSTERED INDEX [fkIdx_64] ON [trvl].[History] 
+ (
+  [id_place] ASC
+ )
+
+GO
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'История посещения мест', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'History';
+GO
+
+
+
+
+
+-- ************************************** [trvl].[Booking]
+
+CREATE TABLE [trvl].[Booking]
+(
+ [id]        bigint NOT NULL ,
+ [date_from] datetime2 NULL ,
+ [date_to]   datetime2 NULL ,
+ [id_place]  bigint NOT NULL ,
+
+
+ CONSTRAINT [PK_History] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_52] FOREIGN KEY ([id_place])  REFERENCES [trvl].[Location]([id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_52] ON [trvl].[Booking] 
+ (
+  [id_place] ASC
+ )
+
+GO
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Брони', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Booking';
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'дата с - при бронировании заполняется датой въезда или датой и временем брони', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Booking', @level2type=N'COLUMN', @level2name=N'date_from';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'дата по - при бронировании заполняется датой отъезда (или не заполняется если это не длительная бронь)', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Booking', @level2type=N'COLUMN', @level2name=N'date_to';
+GO
+
+
+-- ************************************** [trvl].[LinkNotes]
+
+CREATE TABLE [trvl].[LinkNotes]
+(
+ [id]        bigint NOT NULL ,
+ [guid_note] uniqueidentifier NOT NULL ,
+ [link_type] nvarchar(255) NOT NULL ,
+ [id_link]   bigint NOT NULL ,
+
+
+ CONSTRAINT [PK_LinkNotes] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_73] FOREIGN KEY ([guid_note])  REFERENCES [trvl].[Note]([stream_id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_73] ON [trvl].[LinkNotes] 
+ (
+  [guid_note] ASC
+ )
+
+GO
+
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'наименование таблицы с которой осуществляется связь', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'LinkNotes', @level2type=N'COLUMN', @level2name=N'link_type';
+GO
+
+
+
+
+-- ************************************** [trvl].[LinkTags]
+
+CREATE TABLE [trvl].[LinkTags]
+(
+ [id]        bigint NOT NULL ,
+ [id_tag]    int NOT NULL ,
+ [link_type] nvarchar(255) NOT NULL ,
+ [id_link]   bigint NOT NULL ,
+
+
+ CONSTRAINT [PK_LinkTags] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_94] FOREIGN KEY ([id_tag])  REFERENCES [dict].[Tag]([id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_94] ON [trvl].[LinkTags] 
+ (
+  [id_tag] ASC
+ )
+
+GO
+
+-- ************************************** [trvl].[Note]
+
+CREATE TABLE [trvl].[Note]
+(
+ [stream_id] uniqueidentifier NOT NULL CONSTRAINT [DF_Note_guid] DEFAULT NEWID() ,
+
+
+ CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED ([stream_id] ASC)
+);
+GO
+
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Заметки, примечания, комментарии
+FileTable
+поля создаются по умолчанию', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Note';
+GO
+
+
+
+-- ************************************** [trvl].[Location]
+
+CREATE TABLE [trvl].[Location]
+(
+ [id]          bigint NOT NULL ,
+ [name]        nvarchar(1023) NOT NULL ,
+ [latitude]    float NOT NULL ,
+ [longitude]   float NOT NULL ,
+ [id_location] bigint NOT NULL ,
+
+
+ CONSTRAINT [PK_Place] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_110] FOREIGN KEY ([id_location])  REFERENCES [trvl].[Location]([id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_110] ON [trvl].[Location] 
+ (
+  [id_location] ASC
+ )
+
+GO
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Место', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Location';
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'наименование места', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Location', @level2type=N'COLUMN', @level2name=N'name';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'широта', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Location', @level2type=N'COLUMN', @level2name=N'latitude';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'долгота', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Location', @level2type=N'COLUMN', @level2name=N'longitude';
+GO
+
+-- ************************************** [trvl].[Project]
+
+CREATE TABLE [trvl].[Project]
+(
+ [id]        int NOT NULL ,
+ [name]      nvarchar(1023) NOT NULL ,
+ [date_from] date NULL ,
+ [date_to]   date NULL ,
+ [status]    tinyint NOT NULL ,
+
+
+ CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+GO
+
+
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'наименование проекта', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Project', @level2type=N'COLUMN', @level2name=N'name';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'дата начала', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Project', @level2type=N'COLUMN', @level2name=N'date_from';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'дата завершения', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Project', @level2type=N'COLUMN', @level2name=N'date_to';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'статус
+1 - в архиве, 0 - активный
+по умолчанию 0', @level0type = N'SCHEMA', @level0name = N'trvl', @level1type = N'TABLE', @level1name = N'Project', @level2type=N'COLUMN', @level2name=N'status';
+GO
+
+
+
+
+-- ************************************** [dict].[Tag]
+
+CREATE TABLE [dict].[Tag]
+(
+ [id]           int NOT NULL ,
+ [name]         nvarchar(255) NOT NULL ,
+ [tagsgroup_id] int NOT NULL ,
+ [status]       tinyint NOT NULL ,
+ [is_system]    tinyint NOT NULL ,
+
+
+ CONSTRAINT [PK_Tag] PRIMARY KEY CLUSTERED ([id] ASC),
+ CONSTRAINT [FK_86] FOREIGN KEY ([tagsgroup_id])  REFERENCES [dict].[TagsGroup]([id])
+);
+GO
+
+
+CREATE NONCLUSTERED INDEX [fkIdx_86] ON [dict].[Tag] 
+ (
+  [tagsgroup_id] ASC
+ )
+
+GO
+
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'0 - активен, 1 - в архиве
+по умолчанию 0', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'Tag', @level2type=N'COLUMN', @level2name=N'status';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'1 - системная группа, нельзя переместить в архив
+0 - пользовательская группа
+по умолчанию 0', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'Tag', @level2type=N'COLUMN', @level2name=N'is_system';
+GO
+
+
+-- ************************************** [dict].[TagsGroup]
+
+CREATE TABLE [dict].[TagsGroup]
+(
+ [id]        int NOT NULL ,
+ [name]      nvarchar(256) NOT NULL ,
+ [status]    tinyint NOT NULL ,
+ [is_system] tynyint NOT NULL ,
+
+
+ CONSTRAINT [PK_TagsType] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+GO
+
+
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'Группы тэгов', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'TagsGroup';
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'наименование группы тэгов', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'TagsGroup', @level2type=N'COLUMN', @level2name=N'name';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'0 - активна, 1 - в архиве
+по умолчанию 0', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'TagsGroup', @level2type=N'COLUMN', @level2name=N'status';
+GO
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'1 - системная группа, нельзя переместить в архив
+0 - пользовательская группа
+по умолчанию 0', @level0type = N'SCHEMA', @level0name = N'dict', @level1type = N'TABLE', @level1name = N'TagsGroup', @level2type=N'COLUMN', @level2name=N'is_system';
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
