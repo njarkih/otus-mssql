@@ -26,8 +26,8 @@ CREATE TABLE trvl.location (
 , longitude   DECIMAL(18, 6) NOT NULL
 , location_id BIGINT NOT NULL
 
-, CONSTRAINT [PK_locaton] PRIMARY KEY CLUSTERED (id ASC)
-, CONSTRAINT [FK_location_parent] FOREIGN KEY (location_id) REFERENCES trvl.location(id)
+, CONSTRAINT PK_locaton PRIMARY KEY CLUSTERED (id ASC)
+, CONSTRAINT FK_location_parent FOREIGN KEY (location_id) REFERENCES trvl.location(id)
 );
 GO
 
@@ -39,10 +39,10 @@ CREATE SEQUENCE trvl.location_id
 GO
 
 CREATE TABLE trvl.booking (
-  id        BIGINT NOT NULL
-, date_from DATETIMEOFFSET(7) NULL
-, date_to   DATETIMEOFFSET(7) NULL
-, location_id  BIGINT NOT NULL
+  id        	BIGINT NOT NULL
+, date_from 	DATETIMEOFFSET(7) NULL
+, date_to   	DATETIMEOFFSET(7) NULL
+, location_id  	BIGINT NOT NULL
 
 , CONSTRAINT PK_booking PRIMARY KEY CLUSTERED (id ASC)
 , CONSTRAINT FK_booking_location FOREIGN KEY (location_id) REFERENCES trvl.location(id)
